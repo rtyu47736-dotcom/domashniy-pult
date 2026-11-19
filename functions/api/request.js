@@ -1,3 +1,10 @@
+export async function onRequestGet() {
+  return new Response(JSON.stringify({ ok: true, service: "domashniy-pult-api" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" }
+  });
+}
+
 export async function onRequestPost({ request, env }) {
   const headers = { "Content-Type": "application/json", "Cache-Control": "no-store" };
   const reply = (data, status = 200) =>
