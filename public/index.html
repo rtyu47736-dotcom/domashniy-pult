@@ -15,7 +15,7 @@
     *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% 0%,#ffe8eb 0,transparent 36%),radial-gradient(ellipse at 100% 22%,#fce9dd 0,transparent 30%),var(--cream);font-family:Nunito,system-ui,sans-serif;color:var(--ink)}
     .wrap{width:min(100% - 32px,680px);margin:0 auto;padding:34px 0 50px}.top{text-align:center;margin-bottom:24px}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#b47e8d;font-weight:900}.heart{font-size:34px;filter:drop-shadow(0 5px 8px #efc5d0)}h1{font-size:clamp(30px,7vw,44px);line-height:1.05;margin:9px 0 8px;font-weight:900;letter-spacing:-1.5px}.sub{color:var(--muted);font-size:15px;margin:0}
     .panel{background:rgba(255,253,252,.88);border:1px solid rgba(255,255,255,.9);border-radius:28px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.section-title{font-size:15px;font-weight:900;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.choice{border:1px solid var(--line);background:#fff;border-radius:19px;padding:17px 12px;min-height:112px;color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;transition:transform .16s,box-shadow .16s,border-color .16s}.choice:hover{transform:translateY(-2px);box-shadow:0 10px 24px #dba9b52b;border-color:#edc4ce}.choice:active{transform:scale(.98)}.choice.selected{background:#fff0f3;border-color:#e99bad;box-shadow:0 0 0 3px #f8dce3}.emoji{font-size:29px;line-height:1}.choice span:last-child{font-weight:900;font-size:15px}
-    .form{margin-top:18px;display:none;animation:rise .22s ease}.form.show{display:block}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.selected-line{display:flex;align-items:center;gap:9px;font-weight:900;margin-bottom:12px}.field-label{display:block;font-size:13px;font-weight:900;margin:14px 0 7px}.comment{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;color:var(--ink);background:#fff;outline:none}.comment:focus{border-color:#e99bad;box-shadow:0 0 0 3px #f8dce3}.send{width:100%;margin-top:13px;border:0;border-radius:16px;padding:15px;background:linear-gradient(135deg,#e88da5,#d87997);color:white;font:900 16px Nunito, sans-serif;cursor:pointer;box-shadow:0 9px 18px #d9869d44}.send:disabled{opacity:.55;cursor:wait}.hint{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0}.status{display:none;margin-top:16px;padding:16px;border-radius:17px;background:#f0f8ef;color:#456b4b;font-weight:800;text-align:center}.status.show{display:block}.status.warn{background:#fff5e8;color:#8a6135}.foot{text-align:center;color:#ad989d;font-size:12px;margin:18px 0 0}.foot a{color:#ad7b8a;text-decoration:none}.admin-link{opacity:.5;margin-left:10px}
+    .form{margin-top:18px;display:none;animation:rise .22s ease}.form.show{display:block}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.selected-line{display:flex;align-items:center;gap:9px;font-weight:900;margin-bottom:12px}.field-label{display:block;font-size:13px;font-weight:900;margin:14px 0 7px}.comment{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;color:var(--ink);background:#fff;outline:none}.comment:focus{border-color:#e99bad;box-shadow:0 0 0 3px #f8dce3}.send{width:100%;margin-top:13px;border:0;border-radius:16px;padding:15px;background:linear-gradient(135deg,#e88da5,#d87997);color:white;font:900 16px Nunito, sans-serif;cursor:pointer;box-shadow:0 9px 18px #d9869d44}.send:disabled{opacity:.55;cursor:wait}.hint{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0}.status{display:none;margin-top:16px;padding:16px;border-radius:17px;background:#f0f8ef;color:#456b4b;font-weight:800;text-align:center}.status.show{display:block}.status.warn{background:#fff5e8;color:#8a6135}.foot{text-align:center;color:#ad989d;font-size:12px;margin:18px 0 0}
     @media(max-width:420px){.wrap{width:min(100% - 22px,680px);padding-top:24px}.panel{padding:16px;border-radius:23px}.choice{min-height:102px;padding:13px 8px}.choice span:last-child{font-size:14px}}
     @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
   </style>
@@ -46,7 +46,7 @@
     </form>
     <div class="status" id="status" role="status" aria-live="polite"></div>
   </section>
-  <p class="foot">Сделано с любовью 💗 <a class="admin-link" href="/admin.html">История</a></p>
+  <p class="foot">Сделано с любовью 💗</p>
 </main>
 <script>
 const API='/api/request';
@@ -69,13 +69,15 @@ form.addEventListener('submit',async e=>{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:selected,comment:document.getElementById('comment').value,website:''})});
     const data=await r.json();
     if(!r.ok)throw new Error(data.error||'Не удалось отправить заявку');
-    statusBox.className='status show'+(data.emailSent?'':' warn');
-    statusBox.textContent=data.emailSent?'Заявка отправлена! Любимый уже получил уведомление ❤️':'Заявка сохранена, но уведомления на почту пока не подключены. Любимый увидит её в истории после настройки.';
+    statusBox.className='status show';
+    statusBox.textContent='Заявка отправлена! Любимый уже получил уведомление ❤️';
     document.getElementById('comment').value='';
     document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));
     form.classList.remove('show');selected='';
-  }catch(err){statusBox.className='status show warn';statusBox.textContent='Не получилось отправить. Проверь подключение к интернету и попробуй ещё раз.'}
-  finally{sendBtn.disabled=false;sendBtn.textContent='Отправить просьбу ❤️'}
+  }catch(err){
+    statusBox.className='status show warn';
+    statusBox.textContent=err.message||'Не получилось отправить. Проверь подключение к интернету и попробуй ещё раз.';
+  }finally{sendBtn.disabled=false;sendBtn.textContent='Отправить просьбу ❤️'}
 });
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 </script>
