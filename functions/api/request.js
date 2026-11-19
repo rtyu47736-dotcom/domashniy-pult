@@ -54,7 +54,7 @@ export async function onRequestPost({ request, env }) {
       },
       body: JSON.stringify({
         from: env.EMAIL_FROM,
-        to: ["cherniqa12@mail.ru"],
+        to: ["rtyu47736@gmail.com"],
         subject: `Домашний пульт: ${body.action}`,
         html
       })
