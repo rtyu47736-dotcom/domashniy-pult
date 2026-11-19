@@ -29,8 +29,10 @@ h2{text-align:center;font-size:clamp(24px,4vw,39px);margin:8px 0 22px;font-weigh
 .choice:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 8px 0 #e4c2b8,0 15px 24px #995a4c29;filter:saturate(1.06)}
 .choice:active{transform:translateY(3px) scale(.975);box-shadow:0 2px 0 #e4c2b8}
 .choice.selected{border-color:#e77f91;background:linear-gradient(145deg,#ffd7de,#ffcbd5);box-shadow:0 5px 0 #d69ba0,0 0 0 4px #f8d9dd}
-.art{height:105px;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(58px,8vw,86px);line-height:1;filter:drop-shadow(0 5px 2px #80514b25)}
-.art .mini{font-size:.48em;margin-left:-12px;align-self:center}
+.art{height:105px;width:100%;display:flex;align-items:center;justify-content:center;position:relative;line-height:1;filter:drop-shadow(0 5px 2px #80514b25)}
+.cat{font-size:clamp(58px,8vw,86px);transition:transform .22s}.prop{font-size:clamp(27px,4vw,39px);position:absolute;right:12%;bottom:10px;filter:drop-shadow(0 2px 1px #80514b30)}
+.choice:hover .cat{transform:translateY(-4px) rotate(-5deg)}
+.send-husband{cursor:default}.send-husband .destination{cursor:pointer}
 .label{font-size:clamp(16px,2vw,22px);font-weight:1000;line-height:1.12;text-align:center}
 .destination{display:none;width:100%;margin-top:6px;border:2px solid #efb9bc;border-radius:15px;padding:8px;background:#fff8f4;color:#6c3537;font:800 14px Nunito}
 .destination.show{display:block}
@@ -48,22 +50,24 @@ h2{text-align:center;font-size:clamp(24px,4vw,39px);margin:8px 0 22px;font-weigh
 .status.show{display:block}.status.error{display:block;border-color:#f0c7b7;background:#fff0e8;color:#8a4b37}
 @keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 .foot{text-align:center;font-size:18px;font-weight:800;margin:24px 0 0;color:#603833}
-@media(max-width:620px){body{padding:10px 7px 24px}.panel{padding:20px 12px 24px;border-width:4px;border-radius:32px}.panel:before{inset:6px;border-radius:25px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{min-height:148px;border-radius:23px}.art{height:85px;font-size:65px}.label{font-size:16px}.hero{height:105px}.hero-cat{font-size:78px}h2{margin-bottom:16px}.comment-wrap{margin-top:20px}.comment{min-height:72px;padding:16px;font-size:15px}.send{min-width:90%;padding:14px 18px}.foot{font-size:15px}}
+@media(max-width:620px){body{padding:10px 7px 24px}.panel{padding:20px 12px 24px;border-width:4px;border-radius:32px}.panel:before{inset:6px;border-radius:25px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{min-height:148px;border-radius:23px}.art{height:85px}.cat{font-size:65px}.prop{font-size:29px}.label{font-size:16px}.hero{height:105px}.hero-cat{font-size:78px}h2{margin-bottom:16px}.comment-wrap{margin-top:20px}.comment{min-height:72px;padding:16px;font-size:15px}.send{min-width:90%;padding:14px 18px}.foot{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style></head>
 <body><main class="wrap"><section class="panel">
 <header class="header"><h1>Домашний пульт <span class="heart">♡</span></h1><p class="sub">Маленькие просьбы для большого счастья ♡</p><div class="hero"><span class="paw left">🐾</span><span class="hero-cat">🐱</span><span class="paw right">🐾</span></div></header>
 <h2><span class="spark">›</span> Чего тебе хочется? <span class="spark">‹</span></h2>
 <div class="grid" id="choices">
-<button class="choice" data-action="Хочу чай"><span class="art">😺<span class="mini">🍵</span></span><span class="label">Хочу чай</span></button>
-<button class="choice" data-action="Хочу кофе"><span class="art">😽<span class="mini">☕</span></span><span class="label">Хочу кофе</span></button>
-<button class="choice" data-action="Хочу кушать"><span class="art">😸<span class="mini">🍜</span></span><span class="label">Хочу кушать</span></button>
-<button class="choice" data-action="Хочу сладкого"><span class="art">😻<span class="mini">🍰</span></span><span class="label">Хочу сладкого</span></button>
-<button class="choice" data-action="Хочу внимания"><span class="art">😽<span class="mini">💗</span></span><span class="label">Хочу внимания</span></button>
-<button class="choice" data-action="18+"><span class="art">😼<span class="mini">💗</span></span><span class="label">18+</span></button>
-<button class="choice" data-action="Гулять"><span class="art">🐈<span class="mini">🍂</span></span><span class="label">Гулять</span></button>
-<button class="choice" data-action="Сходить в магазин"><span class="art">😺<span class="mini">🛍️</span></span><span class="label">Сходить в магазин</span></button>
-<button class="choice" data-action="Отправить мужа в"><span class="art">😹<span class="mini">💼</span></span><span class="label">Отправить мужа в…</span><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></button>
+<button class="choice" type="button" data-action="Хочу чай"><span class="art"><span class="cat">🐱</span><span class="prop">🍵</span></span><span class="label">Хочу чай</span></button>
+<button class="choice" type="button" data-action="Хочу кофе"><span class="art"><span class="cat">😺</span><span class="prop">☕</span></span><span class="label">Хочу кофе</span></button>
+<button class="choice" type="button" data-action="Хочу кушать"><span class="art"><span class="cat">😸</span><span class="prop">🍜</span></span><span class="label">Хочу кушать</span></button>
+<button class="choice" type="button" data-action="Хочу сладкого"><span class="art"><span class="cat">😻</span><span class="prop">🍰</span></span><span class="label">Хочу сладкого</span></button>
+<button class="choice" type="button" data-action="Хочу внимания"><span class="art"><span class="cat">😽</span><span class="prop">💗</span></span><span class="label">Хочу внимания</span></button>
+<button class="choice" type="button" data-action="Открой окно"><span class="art"><span class="cat">🐈</span><span class="prop">🪟</span></span><span class="label">Открой окно</span></button>
+<button class="choice" type="button" data-action="Закрой окно"><span class="art"><span class="cat">😺</span><span class="prop">🌬️</span></span><span class="label">Закрой окно</span></button>
+<button class="choice" type="button" data-action="18+"><span class="art"><span class="cat">😼</span><span class="prop">💋</span></span><span class="label">18+</span></button>
+<button class="choice" type="button" data-action="Гулять"><span class="art"><span class="cat">🐈</span><span class="prop">🍂</span></span><span class="label">Гулять</span></button>
+<button class="choice" type="button" data-action="Сходить в магазин"><span class="art"><span class="cat">😺</span><span class="prop">🛍️</span></span><span class="label">Сходить в магазин</span></button>
+<div class="choice send-husband" id="husbandCard"><span class="art"><span class="cat">😹</span><span class="prop">📦</span></span><span class="label">Отправить мужа в…</span><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></div>
 </div>
 <div class="comment-wrap"><textarea class="comment" id="comment" maxlength="200" placeholder="Комментарий (по желанию)…"></textarea><div class="counter"><span id="count">0</span> / 200</div></div>
 <div class="send-wrap"><button class="send" id="sendBtn" disabled>➤　Отправить просьбу ♡</button></div>
@@ -71,10 +75,36 @@ h2{text-align:center;font-size:clamp(24px,4vw,39px);margin:8px 0 22px;font-weigh
 <p class="foot">🐾　Сделано с любовью ♡　🐾</p>
 </section></main>
 <script>
-const API='/api/request';let selected='';const buttons=[...document.querySelectorAll('.choice')],where=document.getElementById('where'),send=document.getElementById('sendBtn'),status=document.getElementById('status'),comment=document.getElementById('comment');
-function setAction(action,btn){selected=action;buttons.forEach(b=>b.classList.toggle('selected',b===btn));send.disabled=!selected;status.className='status';status.textContent='';}
-buttons.forEach(btn=>btn.addEventListener('click',e=>{if(e.target===where)return;if(btn.dataset.action==='Отправить мужа в'){where.classList.toggle('show');if(!where.value)selected='';send.disabled=!selected;return;}setAction(btn.dataset.action,btn)}));
-where.addEventListener('change',()=>{if(!where.value){selected='';buttons[8].classList.remove('selected');send.disabled=true;return;}setAction('Отправить мужа в '+where.value,buttons[8]);});
+const API='/api/request';
+let selected='';
+const buttons=[...document.querySelectorAll('.choice[data-action]')];
+const husband=document.getElementById('husbandCard');
+const where=document.getElementById('where');
+const send=document.getElementById('sendBtn');
+const status=document.getElementById('status');
+const comment=document.getElementById('comment');
+function setAction(action,card){
+  selected=action;
+  document.querySelectorAll('.choice').forEach(b=>b.classList.toggle('selected',b===card));
+  send.disabled=!selected;
+  status.className='status';status.textContent='';
+}
+buttons.forEach(btn=>btn.addEventListener('click',()=>setAction(btn.dataset.action,btn)));
+where.addEventListener('change',()=>{
+  if(!where.value){selected='';husband.classList.remove('selected');send.disabled=true;return;}
+  setAction('Отправить мужа в '+where.value,husband);
+});
 comment.addEventListener('input',()=>document.getElementById('count').textContent=comment.value.length);
-send.addEventListener('click',async()=>{if(!selected||send.disabled)return;send.disabled=true;send.textContent='Отправляю…';status.className='status';status.textContent='';try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:selected,comment:comment.value,website:''})});const data=await r.json();if(!r.ok)throw new Error(data.error||'Не удалось отправить просьбу');status.className='status show';status.innerHTML='😻💌<br>Ура! Просьба отправлена. Любимый уже получил уведомление ❤️';comment.value='';document.getElementById('count').textContent='0';selected='';buttons.forEach(b=>b.classList.remove('selected'));where.value='';where.classList.remove('show');}catch(err){status.className='status error';status.textContent=err.message||'Не получилось отправить. Попробуй ещё раз.'}finally{send.textContent='➤　Отправить просьбу ♡';send.disabled=!selected;}});
+send.addEventListener('click',async()=>{
+  if(!selected||send.disabled)return;
+  send.disabled=true;send.textContent='Отправляю…';status.className='status';status.textContent='';
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:selected,comment:comment.value,website:''})});
+    const data=await r.json();if(!r.ok)throw new Error(data.error||'Не удалось отправить просьбу');
+    status.className='status show';status.innerHTML='😻💌<br>Ура! Просьба отправлена. Любимый уже получил уведомление ❤️';
+    comment.value='';document.getElementById('count').textContent='0';selected='';
+    document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));where.value='';
+  }catch(err){status.className='status error';status.textContent=err.message||'Не получилось отправить. Попробуй ещё раз.'}
+  finally{send.textContent='➤　Отправить просьбу ♡';send.disabled=!selected;}
+});
 </script></body></html>
