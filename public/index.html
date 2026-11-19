@@ -126,7 +126,14 @@ send.addEventListener('click',async()=>{
   send.disabled=true;send.textContent='Отправляю…';status.className='status';status.textContent='';
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:selected,comment:comment.value,website:''})});
-    const data=await r.json();if(!r.ok)throw new Error(data.error||'Не удалось отправить просьбу');
+    const raw=await r.text();
+    let data={};
+    if(raw.trim()){
+      try{data=JSON.parse(raw)}catch{throw new Error('Сервер вернул не JSON (HTTP '+r.status+'). Возможно, Cloudflare ещё не обновил обработчик.')}
+    }else{
+      throw new Error('Сервер вернул пустой ответ (HTTP '+r.status+'). Проверьте деплой Cloudflare Pages и функцию /api/request.')
+    }
+    if(!r.ok)throw new Error(data.error||('Ошибка сервера HTTP '+r.status));
     status.className='status show';status.innerHTML='😻💌<br>Ура! Просьба отправлена. Любимый уже получил уведомление ❤️';
     comment.value='';document.getElementById('count').textContent='0';selected='';
     document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));where.value='';
