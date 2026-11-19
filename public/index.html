@@ -100,6 +100,22 @@ function setAction(action,card){
   status.className='status';status.textContent='';
 }
 buttons.forEach(btn=>btn.addEventListener('click',()=>setAction(btn.dataset.action,btn)));
+/* Открываем список направлений по нажатию на карточку */
+husband.setAttribute('role','button');
+husband.setAttribute('tabindex','0');
+husband.setAttribute('aria-label','Выбрать, куда отправить мужа');
+function openHusbandOptions(){
+  where.classList.add('show');
+  try { if (typeof where.showPicker === 'function') where.showPicker(); else where.focus(); }
+  catch (_) { where.focus(); }
+}
+husband.addEventListener('click',(event)=>{
+  if(event.target===where)return;
+  openHusbandOptions();
+});
+husband.addEventListener('keydown',(event)=>{
+  if(event.key==='Enter'||event.key===' '){event.preventDefault();openHusbandOptions();}
+});
 where.addEventListener('change',()=>{
   if(!where.value){selected='';husband.classList.remove('selected');send.disabled=true;return;}
   setAction('Отправить мужа в '+where.value,husband);
