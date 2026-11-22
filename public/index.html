@@ -107,7 +107,7 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
   <option value="0">I.B.</option><option value="1">I.B.</option><option value="2">I.B.</option><option value="3">I.B.</option><option value="4">I.B.</option>
  </select>
  <input class="music-volume" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.65" aria-label="Громкость">
- <audio id="siteMusic" preload="none"></audio>
+ <audio id="siteMusic" preload="auto" autoplay></audio>
 </div>
 </header>
 <h2><span class="spark">›</span> Чего тебе хочется? <span class="spark">‹</span></h2>
@@ -145,9 +145,47 @@ function changeMusicTrack(step){const wasPlaying=!music.paused;loadMusicTrack(cu
 musicPrev.addEventListener('click',()=>changeMusicTrack(-1));musicNext.addEventListener('click',()=>changeMusicTrack(1));
 musicTrack.addEventListener('change',()=>{const wasPlaying=!music.paused;loadMusicTrack(Number(musicTrack.value));if(wasPlaying){music.play().catch(()=>{});musicToggle.textContent='Ⅱ';musicState.textContent='Сейчас играет I.B.'}});
 musicVolume.addEventListener('input',()=>{music.volume=Number(musicVolume.value);try{localStorage.setItem('pultMusicVolume',musicVolume.value)}catch(_){}});
-music.addEventListener('ended',()=>changeMusicTrack(1));
+// После завершения композиции сразу загружаем и запускаем следующую.
+async function playNextTrack(){
+ loadMusicTrack(currentTrack+1);
+ try{
+  await music.play();
+  musicToggle.textContent='Ⅱ';
+  musicToggle.setAttribute('aria-label','Пауза');
+  musicState.textContent='Сейчас играет I.B.';
+ }catch(_){
+  musicState.textContent='Нажми ▶, чтобы продолжить музыку ♡';
+  musicToggle.textContent='▶';
+ }
+}
+music.addEventListener('ended',playNextTrack);
 music.addEventListener('pause',()=>{musicToggle.textContent='▶';musicToggle.setAttribute('aria-label','Воспроизвести')});
 music.addEventListener('play',()=>{musicToggle.textContent='Ⅱ';musicToggle.setAttribute('aria-label','Пауза')});
+
+// Пытаемся включить первую композицию сразу при открытии сайта.
+// Если браузер запрещает autoplay со звуком, запускаем её при первом касании.
+let autoplayStarted=false;
+async function startMusicOnEntry(){
+ if(autoplayStarted || !music.paused) return;
+ autoplayStarted=true;
+ try{
+  await music.play();
+  musicState.textContent='Сейчас играет I.B.';
+ }catch(_){
+  autoplayStarted=false;
+  musicState.textContent='Коснись экрана, чтобы включить музыку ♡';
+  const unlock=async()=>{
+   if(autoplayStarted) return;
+   autoplayStarted=true;
+   try{await music.play();musicState.textContent='Сейчас играет I.B.'}
+   catch(_){autoplayStarted=false}
+  };
+  document.addEventListener('pointerdown',unlock,{once:true});
+  document.addEventListener('keydown',unlock,{once:true});
+ }
+}
+if(document.readyState==='complete') startMusicOnEntry();
+else window.addEventListener('load',startMusicOnEntry,{once:true});
 
 const API='/api/request';
 let selected='';
