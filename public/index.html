@@ -30,7 +30,19 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .choice:hover{transform:translateY(-5px) rotate(-.5deg);box-shadow:0 8px 0 #e4c4b9,0 15px 24px #995a4c25;filter:saturate(1.07)}
 .choice:active{transform:translateY(2px) scale(.975);box-shadow:0 2px 0 #e4c4b9}
 .choice.selected{border-color:#e77f91;background:linear-gradient(145deg,#ffdae0,#ffd0d5);box-shadow:0 5px 0 #d69ba0,0 0 0 4px #f8d9dd}
-.art{width:min(100%,148px);aspect-ratio:1/1;flex:0 0 auto;border-radius:18px;background-image:url('/assets/kristina-buttons.webp');background-repeat:no-repeat;background-size:300% 300%;background-position:var(--x) var(--y);filter:drop-shadow(0 4px 3px #80514b22);transition:transform .25s;animation:artBreath 4.5s ease-in-out infinite}
+.art{width:min(100%,148px);aspect-ratio:1/1;flex:0 0 auto;border-radius:18px;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 4px 3px #80514b22);transition:transform .25s;animation:artBreath 4.5s ease-in-out infinite}
+
+.art.a0{background-image:url('/assets/button-tea.webp')}
+.art.a1{background-image:url('/assets/button-coffee.webp')}
+.art.a2{background-image:url('/assets/button-food.webp')}
+.art.a3{background-image:url('/assets/button-sweet.webp')}
+.art.a4{background-image:url('/assets/button-attention.webp')}
+.art.a5{background-image:url('/assets/button-open-window.webp')}
+.art.a6{background-image:url('/assets/button-closed-window.webp')}
+.art.a7{background-image:url('/assets/button-walk.webp')}
+.art.a8{background-image:url('/assets/button-shopping.webp')}
+#husbandCard .art{background-image:url('/assets/button-husband.webp')}
+
 .choice:hover .art{transform:translateY(-3px) scale(1.035);animation:artWiggle .55s ease-in-out}
 .choice.selected .art{animation:selectedPop .65s ease-out}
 @keyframes artBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
@@ -74,9 +86,9 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <button class="choice" type="button" data-action="Хочу сладкого"><span class="art a3"></span><span class="label">Хочу сладкого</span></button>
 <button class="choice" type="button" data-action="Хочу внимания"><span class="art a4"></span><span class="label">Хочу внимания</span></button>
 <button class="choice" type="button" data-action="Открой окно"><span class="art a5"></span><span class="label">Открой окно</span></button>
-<button class="choice" type="button" data-action="Закрой окно"><span class="art a5" style="transform:scaleX(-1)"></span><span class="label">Закрой окно</span></button>
-<button class="choice" type="button" data-action="Гулять"><span class="art a6"></span><span class="label">Хочу гулять</span></button>
-<button class="choice" type="button" data-action="Сходить в магазин"><span class="art a7"></span><span class="label">Сходить в магазин</span></button>
+<button class="choice" type="button" data-action="Закрой окно"><span class="art a6"></span><span class="label">Закрой окно</span></button>
+<button class="choice" type="button" data-action="Гулять"><span class="art a7"></span><span class="label">Хочу гулять</span></button>
+<button class="choice" type="button" data-action="Сходить в магазин"><span class="art a8"></span><span class="label">Сходить в магазин</span></button>
 <div class="choice" id="husbandCard" role="button" tabindex="0"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
 <div class="select-wrap"><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></div>
 </div>
