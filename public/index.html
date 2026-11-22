@@ -79,6 +79,16 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .status{display:none;margin:18px auto 0;max-width:560px;padding:16px;border:2px solid #cfe7cf;border-radius:20px;background:#f0faed;color:#426b47;text-align:center;font-weight:900;font-size:17px;animation:pop .25s ease}
 .status.show{display:block}.status.error{display:block;border-color:#f0c7b7;background:#fff0e8;color:#8a4b37}
 @keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.music-player{width:min(100%,460px);margin:18px auto 8px;padding:12px 16px;border:2px solid #fff;border-radius:22px;background:linear-gradient(145deg,#fff0eb,#ffe3df);box-shadow:0 4px 0 #e7c9bf,0 8px 18px #995a4c12;display:flex;align-items:center;gap:10px;position:relative;z-index:2}
+.music-player button{width:38px;height:38px;border:1px solid #f2c8c2;border-radius:50%;background:#fffaf7;color:#663b35;font:900 17px Nunito;cursor:pointer;flex:0 0 auto}
+.music-player button.play{width:44px;height:44px;background:linear-gradient(180deg,#ec8192,#d85b76);border-color:#e77b8d;color:#fff;font-size:18px}
+.music-player button:active{transform:scale(.94)}
+.music-info{min-width:0;flex:1;text-align:left}
+.music-title{font-size:15px;font-weight:1000;line-height:1.1}
+.music-sub{font-size:11px;font-weight:800;color:#a17c74;margin-top:3px}
+.music-select{width:72px;border:1px solid #efcfc7;border-radius:12px;background:#fffaf7;color:#663b35;padding:8px 5px;font:900 13px Nunito}
+.music-volume{width:64px;accent-color:#df7181}
+@media(max-width:420px){.music-player{gap:6px;padding:10px 8px}.music-player button{width:34px;height:34px}.music-player button.play{width:40px;height:40px}.music-volume{width:48px}.music-select{width:64px}}
 .foot{text-align:center;font-size:17px;font-weight:800;margin:22px 0 0;color:#70443d}
 @media(max-width:650px){body{padding:8px 6px 22px}.panel{padding:17px 10px 22px;border-width:4px;border-radius:29px}.panel:before{inset:6px;border-radius:22px}.hero{height:255px;width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{min-height:145px;border-radius:21px}.art{width:min(100%,125px)}.label{font-size:16px}.select-wrap{grid-column:span 2}.comment-wrap{margin-top:18px}.comment{font-size:15px;min-height:70px}.send{min-width:92%;padding:13px 16px}.foot{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
@@ -88,6 +98,17 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <h1>Домашний пульт <span class="heart">♡</span></h1>
 <p class="sub">Маленькие просьбы для большого счастья ♡</p>
 <div class="hero" aria-label="Кристина и её летающие желания"><img src="/assets/hero-kristina-clean.webp" alt="Кристина в шляпе"><img class="wish-float w1" src="/assets/wish-coffee.png" alt="" aria-hidden="true"><img class="wish-float w2" src="/assets/wish-tea.png" alt="" aria-hidden="true"><img class="wish-float w3" src="/assets/wish-window.png" alt="" aria-hidden="true"><img class="wish-float w4" src="/assets/wish-food.png" alt="" aria-hidden="true"><img class="wish-float w5" src="/assets/wish-cake.png" alt="" aria-hidden="true"></div>
+<div class="music-player" aria-label="Музыкальный плеер">
+ <button type="button" id="musicPrev" aria-label="Предыдущий трек">‹</button>
+ <button type="button" class="play" id="musicToggle" aria-label="Воспроизвести">▶</button>
+ <button type="button" id="musicNext" aria-label="Следующий трек">›</button>
+ <div class="music-info"><div class="music-title">I.B.</div><div class="music-sub" id="musicState">Музыка для нашего дома ♡</div></div>
+ <select class="music-select" id="musicTrack" aria-label="Выбрать композицию">
+  <option value="0">I.B. 1</option><option value="1">I.B. 2</option><option value="2">I.B. 3</option><option value="3">I.B. 4</option><option value="4">I.B. 5</option>
+ </select>
+ <input class="music-volume" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.65" aria-label="Громкость">
+ <audio id="siteMusic" preload="none"></audio>
+</div>
 </header>
 <h2><span class="spark">›</span> Чего тебе хочется? <span class="spark">‹</span></h2>
 <div class="grid" id="choices">
@@ -112,6 +133,22 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <p class="foot">🐾　Сделано с любовью ♡　🐾</p>
 </section></main>
 <script>
+const musicFiles=['/music/ib-01.mp3','/music/ib-02.mp3','/music/ib-03.mp3','/music/ib-04.mp3','/music/ib-05.mp3'];
+const music=document.getElementById('siteMusic'),musicToggle=document.getElementById('musicToggle'),musicPrev=document.getElementById('musicPrev'),musicNext=document.getElementById('musicNext'),musicTrack=document.getElementById('musicTrack'),musicVolume=document.getElementById('musicVolume'),musicState=document.getElementById('musicState');
+let currentTrack=0;
+try{currentTrack=Math.max(0,Math.min(4,Number(localStorage.getItem('pultMusicTrack')||0)));musicVolume.value=localStorage.getItem('pultMusicVolume')||'0.65'}catch(_){}
+music.volume=Number(musicVolume.value);musicTrack.value=String(currentTrack);
+function loadMusicTrack(i){currentTrack=(i+musicFiles.length)%musicFiles.length;music.src=musicFiles[currentTrack];musicTrack.value=String(currentTrack);try{localStorage.setItem('pultMusicTrack',String(currentTrack))}catch(_){}}
+loadMusicTrack(currentTrack);
+musicToggle.addEventListener('click',async()=>{try{if(music.paused){await music.play();musicToggle.textContent='Ⅱ';musicToggle.setAttribute('aria-label','Пауза');musicState.textContent='Сейчас играет I.B.'}else{music.pause();musicToggle.textContent='▶';musicToggle.setAttribute('aria-label','Воспроизвести');musicState.textContent='Пауза'}}catch(_){musicState.textContent='Нажми ещё раз, чтобы включить музыку ♡'}});
+function changeMusicTrack(step){const wasPlaying=!music.paused;loadMusicTrack(currentTrack+step);if(wasPlaying){music.play().catch(()=>{});musicToggle.textContent='Ⅱ';musicState.textContent='Сейчас играет I.B.'}else{musicToggle.textContent='▶';musicState.textContent='Музыка для нашего дома ♡'}}
+musicPrev.addEventListener('click',()=>changeMusicTrack(-1));musicNext.addEventListener('click',()=>changeMusicTrack(1));
+musicTrack.addEventListener('change',()=>{const wasPlaying=!music.paused;loadMusicTrack(Number(musicTrack.value));if(wasPlaying){music.play().catch(()=>{});musicToggle.textContent='Ⅱ';musicState.textContent='Сейчас играет I.B.'}});
+musicVolume.addEventListener('input',()=>{music.volume=Number(musicVolume.value);try{localStorage.setItem('pultMusicVolume',musicVolume.value)}catch(_){}});
+music.addEventListener('ended',()=>changeMusicTrack(1));
+music.addEventListener('pause',()=>{musicToggle.textContent='▶';musicToggle.setAttribute('aria-label','Воспроизвести')});
+music.addEventListener('play',()=>{musicToggle.textContent='Ⅱ';musicToggle.setAttribute('aria-label','Пауза')});
+
 const API='/api/request';
 let selected='';
 const buttons=[...document.querySelectorAll('.choice[data-action]')];
