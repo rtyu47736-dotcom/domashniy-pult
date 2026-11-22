@@ -45,6 +45,13 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .art.a7{background-image:url('/assets/button-walk.webp')}
 .art.a8{background-image:url('/assets/button-shopping.webp')}
 .art.a9{background-image:url('/assets/button-18plus-kristina.png')}
+.art.cats{background-image:url('/assets/button-cats.svg')}
+.cat-options{grid-column:span 3;display:none;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:-3px}
+.cat-options.show{display:flex}
+.cat-option{border:2px solid #fff;border-radius:16px;padding:10px 17px;background:#fff1eb;color:#603832;font:900 15px Nunito;box-shadow:0 3px 0 #e4c4b9;cursor:pointer;transition:transform .18s,background .18s}
+.cat-option:hover{transform:translateY(-2px);background:#ffe1dc}
+.cat-option:active{transform:translateY(1px)}
+@media(max-width:650px){.cat-options{grid-column:span 2}.cat-option{flex:1 1 42%;padding:10px 8px}}
 #husbandCard .art{background-image:url('/assets/button-husband.webp')}
 
 .choice:hover .art{transform:translateY(-3px) scale(1.035);animation:artWiggle .55s ease-in-out}
@@ -94,6 +101,8 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <button class="choice" type="button" data-action="Гулять"><span class="art a7"></span><span class="label">Хочу гулять</span></button>
 <button class="choice" type="button" data-action="Сходить в магазин"><span class="art a8"></span><span class="label">Сходить в магазин</span></button>
 <button class="choice" type="button" data-action="18+"><span class="art a9"></span><span class="label">18+ ♡</span></button>
+<button class="choice" id="catsCard" type="button" aria-expanded="false"><span class="art cats"></span><span class="label">Котики</span></button>
+<div class="cat-options" id="catOptions" aria-label="Что сделать для котиков"><button class="cat-option" type="button" data-cat-action="Напоить">💧 Напоить</button><button class="cat-option" type="button" data-cat-action="Покормить">🥣 Покормить</button><button class="cat-option" type="button" data-cat-action="Убрать какашки">🧹 Убрать какашки</button></div>
 <div class="choice" id="husbandCard" role="button" tabindex="0"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
 <div class="select-wrap"><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></div>
 </div>
@@ -118,6 +127,19 @@ function setAction(action,card){
  status.className='status';status.textContent='';
 }
 buttons.forEach(btn=>btn.addEventListener('click',()=>setAction(btn.dataset.action,btn)));
+const catsCard=document.getElementById('catsCard');
+const catOptions=document.getElementById('catOptions');
+catsCard.addEventListener('click',()=>{
+ const opened=catOptions.classList.toggle('show');
+ catsCard.setAttribute('aria-expanded',String(opened));
+ if(opened){catsCard.classList.add('selected');selected='';send.disabled=true;status.className='status';status.textContent='';}
+ else{catsCard.classList.remove('selected');}
+});
+catOptions.querySelectorAll('[data-cat-action]').forEach(option=>option.addEventListener('click',()=>{
+ setAction('Котики — '+option.dataset.catAction,catsCard);
+ catOptions.classList.add('show');
+ catsCard.setAttribute('aria-expanded','true');
+}));
 function openHusbandOptions(){where.classList.add('show');try{if(typeof where.showPicker==='function')where.showPicker();else where.focus()}catch(_){where.focus()}}
 husband.addEventListener('click',openHusbandOptions);
 husband.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openHusbandOptions()}});
