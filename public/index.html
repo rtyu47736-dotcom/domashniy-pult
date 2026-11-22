@@ -21,8 +21,11 @@ h1{font-size:clamp(34px,6vw,62px);line-height:1;margin:4px 0 0;font-weight:1000;
 .sub{margin:10px 0 0;font-size:clamp(15px,2.2vw,22px);font-weight:800}
 .hero{position:relative;width:min(100%,570px);height:clamp(260px,39vw,360px);margin:4px auto 4px;display:grid;place-items:center;isolation:isolate}
 .hero:before{content:"";position:absolute;left:7%;right:7%;bottom:12px;height:55px;border-radius:50%;background:radial-gradient(ellipse,#edcfc6 0 45%,transparent 72%);border-bottom:2px solid #e6c3ba;z-index:-1}
-.hero img{height:100%;width:100%;object-fit:contain;filter:drop-shadow(0 8px 5px #81584a20);animation:heroFloat 4s ease-in-out infinite}
+.hero img{height:100%;width:100%;object-fit:contain;filter:drop-shadow(0 8px 5px #81584a20);animation:heroFloat 4s ease-in-out infinite;position:relative;z-index:1}
 @keyframes heroFloat{0%,100%{transform:translateY(3px)}50%{transform:translateY(-5px)}}
+.wish-float{position:absolute;z-index:2;display:grid;place-items:center;width:clamp(38px,7vw,62px);height:clamp(38px,7vw,62px);border:1px solid #fff8;border-radius:50%;background:#fff8f1d9;box-shadow:0 5px 16px #895b4a20;font-size:clamp(23px,4vw,34px);pointer-events:none;animation:wishDrift 5.5s ease-in-out infinite}
+.wish-float.w1{left:12%;top:18%;animation-delay:-1s}.wish-float.w2{left:28%;top:5%;animation-delay:-3.2s}.wish-float.w3{right:15%;top:14%;animation-delay:-2s}.wish-float.w4{right:8%;top:49%;animation-delay:-4.1s}.wish-float.w5{left:15%;top:55%;animation-delay:-2.7s}.wish-float.w6{right:30%;top:3%;animation-delay:-.5s}
+@keyframes wishDrift{0%,100%{transform:translate3d(0,0,0) rotate(-7deg)}25%{transform:translate3d(9px,-13px,0) rotate(5deg)}50%{transform:translate3d(-4px,-21px,0) rotate(9deg)}75%{transform:translate3d(-11px,-8px,0) rotate(-4deg)}}
 h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-weight:1000}
 .spark{color:#d98c4f;margin:0 10px}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;position:relative;z-index:1}
@@ -41,6 +44,7 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .art.a6{background-image:url('/assets/button-closed-window.webp')}
 .art.a7{background-image:url('/assets/button-walk.webp')}
 .art.a8{background-image:url('/assets/button-shopping.webp')}
+.art.a9{background-image:url('/assets/button-18plus.svg')}
 #husbandCard .art{background-image:url('/assets/button-husband.webp')}
 
 .choice:hover .art{transform:translateY(-3px) scale(1.035);animation:artWiggle .55s ease-in-out}
@@ -76,7 +80,7 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <header>
 <h1>Домашний пульт <span class="heart">♡</span></h1>
 <p class="sub">Маленькие просьбы для большого счастья ♡</p>
-<div class="hero"><img src="/assets/kristina-hero.gif" alt="Кристина в шляпе, вокруг неё летают чашки, сладости и другие желания"></div>
+<div class="hero" aria-label="Кристина и её летающие желания"><img src="/assets/kristina-hero.gif" alt="Кристина в шляпе"><span class="wish-float w1" aria-hidden="true">☕</span><span class="wish-float w2" aria-hidden="true">🍵</span><span class="wish-float w3" aria-hidden="true">🪟</span><span class="wish-float w4" aria-hidden="true">🍜</span><span class="wish-float w5" aria-hidden="true">🍰</span><span class="wish-float w6" aria-hidden="true">♡</span></div>
 </header>
 <h2><span class="spark">›</span> Чего тебе хочется? <span class="spark">‹</span></h2>
 <div class="grid" id="choices">
@@ -89,6 +93,7 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <button class="choice" type="button" data-action="Закрой окно"><span class="art a6"></span><span class="label">Закрой окно</span></button>
 <button class="choice" type="button" data-action="Гулять"><span class="art a7"></span><span class="label">Хочу гулять</span></button>
 <button class="choice" type="button" data-action="Сходить в магазин"><span class="art a8"></span><span class="label">Сходить в магазин</span></button>
+<button class="choice" type="button" data-action="18+"><span class="art a9"></span><span class="label">18+ ♡</span></button>
 <div class="choice" id="husbandCard" role="button" tabindex="0"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
 <div class="select-wrap"><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></div>
 </div>
