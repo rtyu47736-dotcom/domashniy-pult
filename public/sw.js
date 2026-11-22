@@ -1,4 +1,4 @@
-const CACHE="home-remote-v3";
+const CACHE="home-remote-v4";
 const ASSETS=[
   "/",
   "/admin.html",
