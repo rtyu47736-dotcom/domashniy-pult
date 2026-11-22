@@ -52,6 +52,12 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .cat-option:hover{transform:translateY(-2px);background:#ffe1dc}
 .cat-option:active{transform:translateY(1px)}
 @media(max-width:650px){.cat-options{grid-column:span 2}.cat-option{flex:1 1 42%;padding:10px 8px}}
+.husband-options{grid-column:span 3;display:none;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:-3px}
+.husband-options.show{display:flex}
+.husband-option{border:2px solid #fff;border-radius:16px;padding:10px 17px;background:#fff1eb;color:#603832;font:900 15px Nunito;box-shadow:0 3px 0 #e4c4b9;cursor:pointer;transition:transform .18s,background .18s}
+.husband-option:hover{transform:translateY(-2px);background:#ffe1dc}
+.husband-option:active{transform:translateY(1px)}
+@media(max-width:650px){.husband-options{grid-column:span 2}.husband-option{flex:1 1 42%;padding:10px 8px}}
 #husbandCard .art{background-image:url('/assets/button-husband.webp')}
 
 .choice:hover .art{transform:translateY(-3px) scale(1.035);animation:artWiggle .55s ease-in-out}
@@ -124,8 +130,8 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <button class="choice" type="button" data-action="18+"><span class="art a9"></span><span class="label">18+ ♡</span></button>
 <button class="choice" id="catsCard" type="button" aria-expanded="false"><span class="art cats"></span><span class="label">Котики</span></button>
 <div class="cat-options" id="catOptions" aria-label="Что сделать для котиков"><button class="cat-option" type="button" data-cat-action="Напоить">💧 Напоить</button><button class="cat-option" type="button" data-cat-action="Покормить">🥣 Покормить</button><button class="cat-option" type="button" data-cat-action="Убрать какашки">🧹 Убрать какашки</button></div>
-<div class="choice" id="husbandCard" role="button" tabindex="0"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
-<div class="select-wrap"><select class="destination" id="where" aria-label="Куда отправить мужа"><option value="">Выбрать место…</option><option value="Ozon">Ozon</option><option value="Wildberries">Wildberries</option><option value="аптеку">В аптеку</option><option value="Пятёрочку">В «Пятёрочку»</option><option value="жопу">В жопу 😂</option></select></div>
+<div class="choice" id="husbandCard" role="button" tabindex="0" aria-expanded="false"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
+<div class="husband-options" id="husbandOptions" aria-label="Куда отправить мужа"><button class="husband-option" type="button" data-husband-destination="Ozon">📦 Ozon</button><button class="husband-option" type="button" data-husband-destination="Wildberries">🛍️ Wildberries</button><button class="husband-option" type="button" data-husband-destination="аптеку">💊 В аптеку</button><button class="husband-option" type="button" data-husband-destination="Пятёрочку">🛒 В «Пятёрочку»</button><button class="husband-option" type="button" data-husband-destination="жопу">😂 В жопу</button></div>
 </div>
 <div class="comment-wrap"><textarea class="comment" id="comment" maxlength="200" placeholder="Комментарий (по желанию)…"></textarea><div class="counter"><span id="count">0</span> / 200</div></div>
 <div class="send-wrap"><button class="send" id="sendBtn" disabled>➤　Отправить просьбу ♡</button></div>
@@ -191,7 +197,7 @@ const API='/api/request';
 let selected='';
 const buttons=[...document.querySelectorAll('.choice[data-action]')];
 const husband=document.getElementById('husbandCard');
-const where=document.getElementById('where');
+const husbandOptions=document.getElementById('husbandOptions');
 const send=document.getElementById('sendBtn');
 const status=document.getElementById('status');
 const comment=document.getElementById('comment');
@@ -215,13 +221,19 @@ catOptions.querySelectorAll('[data-cat-action]').forEach(option=>option.addEvent
  catOptions.classList.add('show');
  catsCard.setAttribute('aria-expanded','true');
 }));
-function openHusbandOptions(){where.classList.add('show');try{if(typeof where.showPicker==='function')where.showPicker();else where.focus()}catch(_){where.focus()}}
-husband.addEventListener('click',openHusbandOptions);
-husband.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openHusbandOptions()}});
-where.addEventListener('change',()=>{
- if(!where.value){selected='';husband.classList.remove('selected');send.disabled=true;return}
- setAction('Отправить мужа в '+where.value,husband);
-});
+function toggleHusbandOptions(){
+ const opened=husbandOptions.classList.toggle('show');
+ husband.setAttribute('aria-expanded',String(opened));
+ if(opened){husband.classList.add('selected');selected='';send.disabled=true;status.className='status';status.textContent='';}
+ else{husband.classList.remove('selected');}
+}
+husband.addEventListener('click',toggleHusbandOptions);
+husband.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleHusbandOptions()}});
+husbandOptions.querySelectorAll('[data-husband-destination]').forEach(option=>option.addEventListener('click',()=>{
+ setAction('Отправить мужа в '+option.dataset.husbandDestination,husband);
+ husbandOptions.classList.add('show');
+ husband.setAttribute('aria-expanded','true');
+}));
 comment.addEventListener('input',()=>document.getElementById('count').textContent=comment.value.length);
 send.addEventListener('click',async()=>{
  if(!selected||send.disabled)return;
@@ -234,7 +246,7 @@ send.addEventListener('click',async()=>{
   if(!r.ok)throw new Error(data.error||('Ошибка сервера HTTP '+r.status));
   status.className='status show';status.innerHTML='💌<br>Ура! Просьба отправлена. Любимый уже получил уведомление ❤️';
   comment.value='';document.getElementById('count').textContent='0';selected='';
-  document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));where.value='';where.classList.remove('show');
+  document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));
  }catch(err){status.className='status error';status.textContent=err.message||'Не получилось отправить. Попробуй ещё раз.'}
  finally{send.textContent='➤　Отправить просьбу ♡';send.disabled=!selected}
 });
