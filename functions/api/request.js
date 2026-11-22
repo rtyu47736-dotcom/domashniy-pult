@@ -23,7 +23,8 @@ export async function onRequestPost({ request, env }) {
   const allowed = [
     "Хочу чай", "Хочу кофе", "Хочу кушать", "Хочу внимания",
     "Открой окно", "Закрой окно", "Хочу сладкого",
-    "18+", "Гулять", "Сходить в магазин"
+    "18+", "Гулять", "Сходить в магазин",
+    "Котики — Напоить", "Котики — Покормить", "Котики — Убрать какашки"
   ];
   const destinations = ["Ozon", "Wildberries", "аптеку", "Пятёрочку", "жопу"];
   const validDestination = destinations.some(place => body.action === `Отправить мужа в ${place}`);
