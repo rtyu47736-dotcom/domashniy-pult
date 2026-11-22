@@ -57,6 +57,14 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 .husband-option{border:2px solid #fff;border-radius:16px;padding:10px 17px;background:#fff1eb;color:#603832;font:900 15px Nunito;box-shadow:0 3px 0 #e4c4b9;cursor:pointer;transition:transform .18s,background .18s}
 .husband-option:hover{transform:translateY(-2px);background:#ffe1dc}
 .husband-option:active{transform:translateY(1px)}
+.joke-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:22px;background:#3d2929a6;backdrop-filter:blur(4px)}
+.joke-modal.show{display:flex}
+.joke-card{width:min(100%,340px);padding:22px 20px 18px;border:3px solid #fff;border-radius:28px;background:linear-gradient(145deg,#fff5ef,#ffe2df);box-shadow:0 12px 40px #24141455;text-align:center;animation:jokePop .28s ease-out}
+.joke-cat{display:block;width:min(100%,190px);height:170px;object-fit:contain;margin:0 auto 8px;filter:drop-shadow(0 5px 5px #76504a22)}
+.joke-text{font:1000 25px Nunito;color:#603832;margin:4px 0 18px}
+.joke-close{border:2px solid #fff;border-radius:999px;padding:10px 26px;background:#e77f91;color:#fff;font:900 16px Nunito;box-shadow:0 3px 0 #c35e70;cursor:pointer}
+@keyframes jokePop{from{opacity:0;transform:translateY(12px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.joke-card{animation:none}}
 @media(max-width:650px){.husband-options{grid-column:span 2}.husband-option{flex:1 1 42%;padding:10px 8px}}
 #husbandCard .art{background-image:url('/assets/button-husband.webp')}
 
@@ -132,6 +140,13 @@ h2{text-align:center;font-size:clamp(23px,3.8vw,36px);margin:5px 0 20px;font-wei
 <div class="cat-options" id="catOptions" aria-label="Что сделать для котиков"><button class="cat-option" type="button" data-cat-action="Напоить">💧 Напоить</button><button class="cat-option" type="button" data-cat-action="Покормить">🥣 Покормить</button><button class="cat-option" type="button" data-cat-action="Убрать какашки">🧹 Убрать какашки</button></div>
 <div class="choice" id="husbandCard" role="button" tabindex="0" aria-expanded="false"><span class="art a8"></span><span class="label">Отправить мужа в…</span></div>
 <div class="husband-options" id="husbandOptions" aria-label="Куда отправить мужа"><button class="husband-option" type="button" data-husband-destination="Ozon">📦 Ozon</button><button class="husband-option" type="button" data-husband-destination="Wildberries">🛍️ Wildberries</button><button class="husband-option" type="button" data-husband-destination="аптеку">💊 В аптеку</button><button class="husband-option" type="button" data-husband-destination="Пятёрочку">🛒 В «Пятёрочку»</button><button class="husband-option" type="button" data-husband-destination="жопу">😂 В жопу</button></div>
+<div class="joke-modal" id="jokeModal" role="dialog" aria-modal="true" aria-labelledby="jokeText">
+ <div class="joke-card">
+  <img class="joke-cat" src="/assets/%D0%9C%D0%B8%D0%BB%D1%8B%D0%B5%20%D0%BA%D0%BE%D1%82%D0%B8%D0%BA%D0%B8%20%D0%BD%D0%B0%20%D1%83%D1%8E%D1%82%D0%BD%D0%BE%D0%BC%20%D0%BF%D0%BB%D0%B5%D0%B4%D0%B5.png" alt="Удивлённые котики">
+  <div class="joke-text" id="jokeText">За что?</div>
+  <button class="joke-close" id="jokeClose" type="button">Ладно ❤️</button>
+ </div>
+</div>
 </div>
 <div class="comment-wrap"><textarea class="comment" id="comment" maxlength="200" placeholder="Комментарий (по желанию)…"></textarea><div class="counter"><span id="count">0</span> / 200</div></div>
 <div class="send-wrap"><button class="send" id="sendBtn" disabled>➤　Отправить просьбу ♡</button></div>
@@ -229,10 +244,24 @@ function toggleHusbandOptions(){
 }
 husband.addEventListener('click',toggleHusbandOptions);
 husband.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleHusbandOptions()}});
+const jokeModal=document.getElementById('jokeModal');
+const jokeText=document.getElementById('jokeText');
+const jokeClose=document.getElementById('jokeClose');
+const husbandJokes=['За что?','Ты уверена?','Он же хороший'];
+function showHusbandJoke(){
+ jokeText.textContent=husbandJokes[Math.floor(Math.random()*husbandJokes.length)];
+ jokeModal.classList.add('show');
+ jokeClose.focus();
+}
+function closeHusbandJoke(){jokeModal.classList.remove('show')}
+jokeClose.addEventListener('click',closeHusbandJoke);
+jokeModal.addEventListener('click',e=>{if(e.target===jokeModal)closeHusbandJoke()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&jokeModal.classList.contains('show'))closeHusbandJoke()});
 husbandOptions.querySelectorAll('[data-husband-destination]').forEach(option=>option.addEventListener('click',()=>{
  setAction('Отправить мужа в '+option.dataset.husbandDestination,husband);
  husbandOptions.classList.add('show');
  husband.setAttribute('aria-expanded','true');
+ if(option.dataset.husbandDestination==='жопу') showHusbandJoke();
 }));
 comment.addEventListener('input',()=>document.getElementById('count').textContent=comment.value.length);
 send.addEventListener('click',async()=>{
